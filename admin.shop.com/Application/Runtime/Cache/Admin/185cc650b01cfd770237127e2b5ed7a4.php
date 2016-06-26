@@ -16,7 +16,7 @@
         </h1>
         <div style="clear:both"></div>
         <div class="form-div">
-            <form action="" name="searchForm">
+            <form action="<?php echo U();?>" name="searchForm">
                 <img src="http://admin.shop.com/Public/Admin/images/icon_search.gif" width="26" height="22" border="0" alt="search" />
                 <input type="text" name="name" size="15" value="<?php echo I('get.name');?>"/>
                 <input type="submit" value=" 搜索 " class="button" />
