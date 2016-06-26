@@ -61,9 +61,27 @@ class ArticleModel extends Model
 //        $rows = $this->where($con)->order('article.sort')->page(I('get.p'),$pageSeting['PAGE_SIEZ'])->join(' article_category ON article.article_category_id=article_category.id ')->select();
 
 
-        $rows = $this->where($cond)->order('sort')->page(I('get.p'),$pageSeting['PAGE_SIEZ'])->select();
-        $html = $page->show();
+        $name = I('get.name');
+        $option = [
+            'a.status'=>['egt',0],
+            'b.id'=>['exp','=a.article_category_id'],
+            'a.article_category_id'=>$id
+        ];
+        if($name){
+            $option['a.name']=['like','%'.$name.'%'];
+        }
+        $arr=[
+            'article'=>'a',
+            'article_category'=>'b'
+        ];
+
+        $rows = $this->field('a.*,b.name name1')->table($arr)->where($option)->order('a.sort')->page(I('get.p'),$pageSeting['PAGE_SIEZ'])->select();
+
         //dump($this->getLastSql());exit;
+        //dump($rows);exit;
+
+        $html = $page->show();
+        //$rows = $this->where($cond)->order('sort')->page(I('get.p'),$pageSeting['PAGE_SIEZ'])->select();
         return compact(['rows','html']);
     }
     
