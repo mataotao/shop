@@ -23,14 +23,7 @@ class BrandModel extends Model
         ['status','0,1','品牌状态不合法',self::EXISTS_VALIDATE,'in'],
         ['sort','number','排序必须为数字'],
     ];
-
-    public function addBrand($file){
-        $upload = new Upload(C('UPLOAD_SETTING'));
-        $rst = $upload->uploadOne($file);
-        $filePath = $rst['savepath'].$rst['savename'];
-        $this->data['logo']=$filePath;
-        return $this->add();
-    }
+    
     public function selectBrand(array $cond){
         $pageSetting =C('PAGE_SETTING');
         $count = $this->where($cond)->count();

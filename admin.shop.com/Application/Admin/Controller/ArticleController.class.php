@@ -27,7 +27,7 @@ class ArticleController extends Controller
         if($name){
             $cond['name']=['like','%'.$name.'%'];
         }
-        $rows= $this->_model->selectArticle($cond,$id);
+        $rows= $this->_model->selectArticle($cond);
         $this->assign('id',$id);
         $this->assign($rows);
         $this->display();
@@ -76,7 +76,7 @@ class ArticleController extends Controller
         $data = [
             'id'=>$id,
             'status'=>-1,
-            'name'=>'concat(name,"_del")'
+            'name'=>['exp','concat(name,"_del")']
         ];
         if($this->_model->deleteArticle($data)===false){
             $this->error(get_error($this->_model));

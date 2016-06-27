@@ -37,7 +37,7 @@ class BrandController extends Controller
             if($this->_model->create()===false){
                 $this->error(get_error($this->_model));
             }
-            if($this->_model->addBrand($_FILES['logo'])===false){
+            if($this->_model->add()===false){
                 $this->error(get_error($this->_model));
             }else{
                 $this->success('添加成功',U('index'));

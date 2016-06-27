@@ -21,7 +21,7 @@ class ArticleModel extends Model
         ['name','','文章已存在',self::EXISTS_VALIDATE,'unique'],
         ['sort','number','排序必须为数字'],
         ['status','0,1','分类状态不合法',self::EXISTS_VALIDATE,'in'],
-        ['article_category_id','1,2,3,4,5,6,7,8','分类不合法',self::EXISTS_VALIDATE,'in'],
+        //['article_category_id','1,2,3,4,5,6,7,8','分类不合法',self::EXISTS_VALIDATE,'in'],
     ];
     protected $_auto = [
         ['inputtime',NOW_TIME]
@@ -46,7 +46,7 @@ class ArticleModel extends Model
 
     }
 
-    public function selectArticle($cond,$id){
+    public function selectArticle($cond){
         $pageSeting = C("PAGE_SETTING");
         $count = $this->where($cond)->count();
         $page = new Page($count,$pageSeting['PAGE_SIEZ']);
@@ -61,28 +61,29 @@ class ArticleModel extends Model
 //        $rows = $this->where($con)->order('article.sort')->page(I('get.p'),$pageSeting['PAGE_SIEZ'])->join(' article_category ON article.article_category_id=article_category.id ')->select();
 
 
-        $name = I('get.name');
-        $option = [
-            'a.status'=>['egt',0],
-            'b.id'=>['exp','=a.article_category_id'],
-            'a.article_category_id'=>$id
-        ];
-        if($name){
-            $option['a.name']=['like','%'.$name.'%'];
-        }
-        $arr=[
-            'article'=>'a',
-            'article_category'=>'b'
-        ];
+//        $name = I('get.name');
+//        $option = [
+//            'a.status'=>['egt',0],
+//            'b.id'=>['exp','=a.article_category_id'],
+//            'a.article_category_id'=>$id
+//        ];
+//        if($name){
+//            $option['a.name']=['like','%'.$name.'%'];
+//        }
+//        $arr=[
+//            'article'=>'a',
+//            'article_category'=>'b'
+//        ];
 
-        $rows = $this->field('a.*,b.name name1')->table($arr)->where($option)->order('a.sort')->page(I('get.p'),$pageSeting['PAGE_SIEZ'])->select();
+       // $rows = $this->field('a.*,b.name name1')->table($arr)->where($option)->order('a.sort')->page(I('get.p'),$pageSeting['PAGE_SIEZ'])->select();
 
         //dump($this->getLastSql());exit;
         //dump($rows);exit;
-
+        $rows = $this->where($cond)->order('sort')->page(I('get.p'),$pageSeting['PAGE_SIEZ'])->select();
         $html = $page->show();
-        //$rows = $this->where($cond)->order('sort')->page(I('get.p'),$pageSeting['PAGE_SIEZ'])->select();
-        return compact(['rows','html']);
+        $article_category_model = D('ArticleCategory');
+        $classify = $article_category_model->where(['status'=>['egt',0]])->getField('id,name');
+        return compact(['rows','html','classify']);
     }
     
     public function editSelectArticle($id){

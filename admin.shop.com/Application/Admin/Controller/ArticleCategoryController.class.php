@@ -61,15 +61,22 @@ class ArticleCategoryController extends Controller
         }
     }
     public function remove($id){
-        $data = [
-            'id'=>$id,
-            'status'=>-1,
-            'name'=>['exp','concat(name,"_del")']
-        ];
-        if($this->_model->setField($data)===false){
-            $this->error(get_error($this->_model));
+        $Article_model = D('Article');
+        $row = $Article_model->where(['article_category_id'=>$id,'status'=>['egt',0]])->select();
+        if(!empty($row)){
+            $this->error('删除失败，该分类下有文章');
         }else{
-            $this->success('删除成功',U('index'));
+
+            $data = [
+                'id'=>$id,
+                'status'=>-1,
+                'name'=>['exp','concat(name,"_del")']
+            ];
+            if($this->_model->setField($data)===false){
+                $this->error(get_error($this->_model));
+            }else{
+                $this->success('删除成功',U('index'));
+            }
         }
 
     }

@@ -7,7 +7,10 @@ return array(
         '__CSS__'=> BASE_URL . '/Public/Admin/css',
         '__JS__'=> BASE_URL . '/Public/Admin/js',
         '__IMG__'=> BASE_URL . '/Public/Admin/images',
-        '__FILES__'=>BASE_URL.'/Public/Admin/'
+        '__FILES__'=>BASE_URL.'/Public/Admin/',
+        '__UPLOADIFY__'=>BASE_URL.'/Public/Admin/ext/uploadify',
+        '__ZTREE__'=>BASE_URL.'/Public/Admin/ext/ztree',
+        '__LAYER__'=>BASE_URL.'/Public/Admin/ext/layer',
     ],
     
     /* 数据库设置 */
@@ -32,17 +35,6 @@ return array(
         'PAGE_THEME'=>'%HEADER% %FIRST% %UP_PAGE% %LINK_PAGE% %DOWN_PAGE% %END%',
     ],
     //上传文件配置
-    'UPLOAD_SETTING'=> [
-        'mimes' => 'image/jpeg,image/png',
-        'maxSize' => 1024000,
-        'exts' => array('jpg','jpeg','png'),
-        'autoSub' => true,
-        'subName' => array('date', 'Y-m'),
-        'rootPath' => ROOT_PATH."public/Admin/",
-        'savePath' => 'upload_files_img/',
-        'saveName' => array('uniqid', ''),
-        'saveExt' => '',
-        'replace' => false,
-        'hash' => true,
-    ]
+    'UPLOAD_SETTING'=> require 'upload.php',
+    
 );
