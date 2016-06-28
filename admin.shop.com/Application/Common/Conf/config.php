@@ -11,6 +11,7 @@ return array(
         '__UPLOADIFY__'=>BASE_URL.'/Public/Admin/ext/uploadify',
         '__ZTREE__'=>BASE_URL.'/Public/Admin/ext/ztree',
         '__LAYER__'=>BASE_URL.'/Public/Admin/ext/layer',
+        '__TREEGRID__'=>BASE_URL.'/Public/Admin/ext/treegrid',
     ],
     
     /* 数据库设置 */

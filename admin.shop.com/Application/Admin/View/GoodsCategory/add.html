@@ -53,13 +53,13 @@
             <tr>
                 <td class="label">是否显示</td>
                 <td>
+                    <input type="hidden" name="id" value="{$row.id}"/>
                     <input type="radio" name="status" value="1" class="status"/> 是
                     <input type="radio" name="status" value="0" class="status" /> 否
                 </td>
             </tr>
             <tr>
                 <td colspan="2" align="center"><br />
-                    <input type="hidden" name="id" value="{$row.id}" />
                     <input type="submit" class="button" value=" 确定 " />
                     <input type="reset" class="button" value=" 重置 " />
                 </td>
@@ -75,29 +75,27 @@
 <js href='__JS__/jquery.min.js'/>
 <script type="text/javascript" src="__ZTREE__/js/jquery.ztree.core.js"></script>
 <script type='text/javascript'>
-    var setting = {
-        data: {
-            simpleData: {
-                enable: true,
-                pIdKey: 'parent_id',
+    var setting = {   //设置ztree的配置
+        data: {    //设置属性
+            simpleData: {   //简易模式
+                enable: true,  //开启异步加载
+                pIdKey: 'parent_id'  //以parent_id为父级
             },
         },
-        callback:{
-            onClick:function(event,node,item){
-                $('#parent_id').val(item.id);
-                $('#parent_name').val(item.name);
+        callback:{   //方法
+            onClick:function(event,node,item){     //点击时触发
+                $('#parent_id').val(item.id);      //设置隐藏域的值
+                $('#parent_name').val(item.name);   //设置input的值
             },
         },
     };
 
-    var goods_categories = {$goods_categories};
+    var goods_categories = {$goods_categories};  //传入要显示的值
     $(function () {
         $('.status').val([{$row.status|default=1}]);
-        var goods_category_ztree = $.fn.zTree.init($("#goods_categories"), setting, goods_categories);
-        goods_category_ztree.expandAll(true);
+        var goods_category_ztree = $.fn.zTree.init($("#goods_categories"), setting, goods_categories);  //初始化ztree
+        goods_category_ztree.expandAll(true);  //设置默认状态为展开状态
         <present name="row">
-        //获取父级分类在ztree中的节点
-//                    var parent_node = goods_category_ztree.getNodeByTId({$row.parent_id});
         var parent_node = goods_category_ztree.getNodeByParam('id',{$row.parent_id});
         goods_category_ztree.selectNode(parent_node);
         $('#parent_id').val(parent_node.id);

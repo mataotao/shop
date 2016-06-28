@@ -78,7 +78,7 @@ $(function () {
         'fileObjName':'file_data',
         onUploadSuccess:function (file_item,response) {
             var data = $.parseJSON(response);
-            console.log(data);
+            //console.log(data);
             if(data.status){
                 $('#logo').val(data.file_url);
                 $('#logo_preview').attr('src',data.file_url);
