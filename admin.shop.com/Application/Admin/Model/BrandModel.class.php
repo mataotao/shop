@@ -45,7 +45,10 @@ class BrandModel extends Model
         }
         return $this->save();
     }
-    
+
+    public function getList(){
+        return $this->where(['status' => ['gt', 0]])->select();
+    }
    
 
 }

@@ -12,6 +12,7 @@ return array(
         '__ZTREE__'=>BASE_URL.'/Public/Admin/ext/ztree',
         '__LAYER__'=>BASE_URL.'/Public/Admin/ext/layer',
         '__TREEGRID__'=>BASE_URL.'/Public/Admin/ext/treegrid',
+        '__UEDITOR__'=>BASE_URL.'/Public/Admin/ext/ueditor',
     ],
     
     /* 数据库设置 */

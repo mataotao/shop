@@ -28,4 +28,8 @@ class SupplierModel extends \Think\Model{
         return compact(['rows','page_html']);
         
     }
+
+    public function getList(){
+        return $this->where(['status' => ['gt', 0]])->select();
+    }
 }

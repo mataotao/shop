@@ -13,7 +13,7 @@ return [
     'replace'      => false, //存在同名是否覆盖
     'hash'         => true, //是否生成hash编码
     'callback'     => false, //检测文件是否存在回调，如果存在返回文件信息数组
-    'driver'       => 'Qiniu', // 文件上传驱动
+    //'driver'       => 'Qiniu', // 文件上传驱动
     'driverConfig' => array(
         'secrectKey' => 'jl-kngQMl5R_2glJauKMLV5eZt_J5AQaeKYrvKfp', //SK
         'accessKey'  => 'Gtt5HoEZDTLfGRh95fZhbAgp41WFi9NtUff1137k', //AK

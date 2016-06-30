@@ -28,9 +28,7 @@
         <table cellpadding="3" cellspacing="1" class="tree">
             <tr>
                 <th>商品分类名称</th>
-                <th>左节点</th>
-                <th>右节点</th>
-                <th>父级节点</th>
+
                 <th>商品分类描述</th>
                 <th>状态</th>
                 <th>操作</th>
@@ -38,9 +36,6 @@
             <foreach name="rows" item="row">
                 <tr class="treegrid-{$row.id} <neq name='row.level' value='1'>treegrid-parent-{$row.parent_id}</neq>">
                     <td class="first-cell">{$row.name}</td>
-                    <td align="center">{$row.lft}</td>
-                    <td align="center">{$row.rght}</td>
-                    <td align="center">{$row.parent_id}</td>
                     <td align="center">{$row.intro}</td>
                     <td align="center"><if condition="$row.status eq 1"><img src="__IMG__/yes.gif" /><else /><img src="__IMG__/no.gif" /></if></td>
                     <td align="center">

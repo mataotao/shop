@@ -90,11 +90,16 @@
         },
     };
 
-    var goods_categories = {$goods_categories};  //传入要显示的值
+    var goods_categories = {$goods_categories};  //传入要显示的值  传入的值必须为Json字符串
     $(function () {
         $('.status').val([{$row.status|default=1}]);
         var goods_category_ztree = $.fn.zTree.init($("#goods_categories"), setting, goods_categories);  //初始化ztree
         goods_category_ztree.expandAll(true);  //设置默认状态为展开状态
+
+        //检测row是否赋值
+        //获取父级节点
+        //选中父级节点
+        //为隐藏域赋值
         <present name="row">
         var parent_node = goods_category_ztree.getNodeByParam('id',{$row.parent_id});
         goods_category_ztree.selectNode(parent_node);
