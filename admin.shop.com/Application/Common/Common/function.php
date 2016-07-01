@@ -23,7 +23,7 @@ function arr2select(array $data,$value_name='id',$value_val='name',$name='',$def
     $html = "<select name='".$name."' class='".$name."'>";
     $html .= "<option value='' >请选择</option>";
     foreach ($data as $val){
-        if($val["$value_name"]==$default_value){
+        if((string)$val["$value_name"]==$default_value){
             $html.="<option value='".$val[$value_name]."' selected='selected'>".$val[$value_val]."</option>";
         }else{
             $html.="<option value='".$val[$value_name]."'>".$val[$value_val]."</option>";

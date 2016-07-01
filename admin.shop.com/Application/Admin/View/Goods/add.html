@@ -195,83 +195,128 @@
 
         //ztree开始
     var setting={
+        //属性
         data:{
+            //建议模式
             simpleData:{
+                //开启异步
                 enable:true,
+                //选择父级id字段
                 pIdKey:'parent_id'
             }
         },
+        //方法
         callback:{
+            //点击事件
             onClick:function (event,node,item) {
+                //设置id到隐藏域
                 $('#goods_category_id').val(item.id);
+                //设置name到隐藏域
                 $('#goods_category_name').val(item.name);
             }
         }
     }
+        //接受要是用ztree的数据
     var goods_categories = {$goods_categories};
+        //页面加载完成
     $(function () {
-        $('.status').val([{$row.status|default=1}]);
+       // $('.status').val([{$row.status|default=1}]);
+        //初始化ztree插件
         var goods_category_ztree = $.fn.zTree.init($("#goods_categories"),setting,goods_categories);
+        //初始化状态为展开状态
         goods_category_ztree.expandAll(true);
+        //判断row时候赋值
         <present name="row">
+            //通过传来的父级id获取到父级节点
             var parent_node = goods_category_ztree.getNodeByParam('id',{$row.goods_category_id});
+            //选中父级节点
             goods_category_ztree.selectNode(parent_node);
+            //设置id到input
             $('#goods_category_id').val(parent_node.id);
+            //设置id到input
             $('#goods_category_name').val(parent_node.name);
         </present>
 
         //ztree结束
 
         //选中状态
+        //通过传来的值选中对应的状态,如果没值,设置默认值
         $('.is_on_sale').val([{$row.is_on_sale|default=1}]);
         $('.goods_status').val({$row.goods_status|default='[]'});
     })
         //uploadify
     $options ={
+        //swf文件的路径
         swf:'__UPLOADIFY__/uploadify.swf',
+        //选择执行的方法
         uploader:'{:U("Upload/uploadImg")}',
+        //按钮显示的文字
         buttonText:' 选择文件 ',
+        //文件的name属性的值
         fileObjName:'file_data',
+
         onUploadSuccess:function(file_item,response){
+            //因为传来的是json,所以要解析
             var data = $.parseJSON(response);
+            //判断状态
             if(data.status){
+                //设置要添加的HTML代码
                 var html = '<div class="gallery-upload-pre-item">\
                                         <img src="'+data.file_url+'"/>\
                                         <a href="#">×</a>\
                                         <input type="hidden" name="path[]" value="'+data.file_url+'"/>\
                                     </div>';
+                //选择并添加到后面
                 $(html).appendTo($('.gallery-upload-img-box'));
+                //显示layer 笑脸
                 layer.alert(data.msg, {icon: 6});
             }else{
+                //显示layer 哭脸
                 layer.alert(data.msg, {icon: 5});
             }
         },
     };
+        //初始化uploadify插件
         $('#goods_gallery').uploadify($options);
 
+    //删除图片开始
+        //委派点击事件
     $('.gallery-upload-img-box').on('click','a',function () {
+        //获取点击的属性
         var id=$(this).attr('data');
+        //设置标记 方便删除
         var flag = true;
+        //判断
         if(id){
+            //设置要传输的url
             var url = '{:U("Goods/removeGallery")}';
+            //设置附加参数
             var data ={id:id}
+            //通过get方式
             $.getJSON(url,data,function (response) {
+                //判断状态
                 if(!response.status){
+                    //设置标记的值
                     flag = false;
                 }
             })
+            //判断标记的值
             if(flag){
+                //找到父节点
                 var parent_node = $(this).parent();
+                //删除
                 parent_node.remove();
+                //layer弹窗
                 layer.alert('删除成功',{icon:6});
             }else{
+                //layer弹窗
                 layer.alert('删除失败',{icon:5});
             }
             return false;
 
         }
         })
-
+    //删除图片结束
 </script>
 </body>
 </html>
