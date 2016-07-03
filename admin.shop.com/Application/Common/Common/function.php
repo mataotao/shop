@@ -32,3 +32,7 @@ function arr2select(array $data,$value_name='id',$value_val='name',$name='',$def
     $html.="</select>";
     return $html;
 }
+
+function salt_mcrypt($salt,$password){
+    return md5(md5($password).$salt);
+}

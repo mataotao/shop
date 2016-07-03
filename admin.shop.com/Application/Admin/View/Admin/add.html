@@ -1,0 +1,154 @@
+<!-- $Id: brand_info.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>ECSHOP 管理中心 - 添加管理员 </title>
+    <meta name="robots" content="noindex, nofollow">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="__CSS__/general.css" rel="stylesheet" type="text/css" />
+    <link href="__CSS__/main.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="__ZTREE__/css/zTreeStyle/zTreeStyle.css" type="text/css"/>
+    <style type="text/css">
+        ul.ztree{
+            margin-top: 10px;
+            border: 1px solid #617775;
+            background: #f0f6e4;
+            width: 220px;
+            overflow-y: scroll;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+<h1>
+    <span class="action-span"><a href="{:U('index')}">商品管理员</a></span>
+    <span class="action-span1"><a href="#">ECSHOP 管理中心</a></span>
+    <span id="search_id" class="action-span1"> - 添加管理员 </span>
+    <div style="clear:both"></div>
+</h1>
+<div class="main-div">
+    <form method="post" action="{:U()}"enctype="multipart/form-data" >
+        <table cellspacing="1" cellpadding="3" width="100%">
+            <tr>
+                <td class="label">管理员名称</td>
+                <td><present name="row" >
+                    {$row.username}
+                        <else />
+                    <input type="text" name="username" maxlength="60"  />
+                    <span class="require-field">*</span>
+                </present>
+
+                </td>
+            </tr>
+            <notpresent name="row" >
+            <tr>
+                <td class="label">密码</td>
+                <td>
+                    <input type="password"  name="password" />
+                </td>
+            </tr>
+            <tr>
+                <td class="label">重复密码</td>
+                <td>
+                    <input type="password"  name="repassword" />
+                </td>
+            </tr>
+            </notpresent>
+            <tr>
+                <td class="label">角色</td>
+                <td>
+                    <ul class="ztree" id="roles"></ul>
+                    <div id="role_ids"></div>
+                </td>
+            </tr>
+            <tr>
+                <td class="label">邮箱 </td>
+                <td>
+                    <present name="row" >
+                        {$row.email}
+                        <else />
+                        <input type="text" name="email" maxlength="40" size="15" />
+                    </present>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center"><br />
+                    <input type="hidden" name="id" value="{$row.id}">
+                    <input type="submit" class="button" value=" 确定 " />
+                    <input type="reset" class="button" value=" 重置 " />
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<div id="footer">
+    共执行 3 个查询，用时 0.021251 秒，Gzip 已禁用，内存占用 2.194 MB<br />
+    版权所有 &copy; 2016马涛有限公司，并保留所有权利。
+</div>
+<js href="__JS__/jquery.min.js" />
+<script type="text/javascript" src="__ZTREE__/js/jquery.ztree.core.js"></script>
+<script type="text/javascript" src="__ZTREE__/js/jquery.ztree.excheck.js"></script>
+<script>
+    //设置ztree配置
+    var setting={
+        //属性
+        data:{
+            //简易模式
+            simpleData:{
+                //开启异步
+                enable:true,
+                //主键
+                pIdKey:'parent_id'
+            }
+        },
+        //复选
+        check:{
+            //开启异步
+            enable:true,
+            //类型
+            chkboxType: {"Y": "s", "N": "s"},
+        },
+        //方法
+        callback:{
+            //选中
+            onCheck:function(){
+                //获取选中节点
+                var nodes = role_ztree.getCheckedNodes(true);
+                //把隐藏域制空方便添加数据
+                $('#role_ids').empty();
+                //遍历选中的权限并把信息添加到隐藏域,生成html代码并添加到页面
+                $.each(nodes,function (i,v) {
+                    var html = '<input type="hidden" name="role_id[]" value="' + v.id + '"/>';
+                    //添加到div
+                    $(html).appendTo($('#role_ids'));
+                })
+            }
+        }
+    }
+    //获取数据
+    var roles = {$roles};
+    //初始化ztree
+    var role_ztree = $.fn.zTree.init($('#roles'), setting, roles);
+    //默然展开
+    role_ztree.expandAll(true);
+    //判断状态并选中,没有值就使用默认值
+    $('.status').val([{$row.status|default=1}]);
+    //判断row是否赋值
+    <present name="row">
+                    //获取对应管理员的权限数据
+    var role_ids = {$row.role_ids};
+    //遍历并选中
+    $(role_ids).each(function(i,v){
+        //获取权限id对应的节点
+        var node = role_ztree.getNodeByParam('id',v);
+        //选中
+        role_ztree.checkNode(node,true);
+        //生成html代码
+        var html = '<input type="hidden" name="role_id[]" value="' + v + '"/>';
+        //添加在div里
+        $(html).appendTo($('#role_ids'));
+    });
+    </present>
+</script>
+</body>
+</html>

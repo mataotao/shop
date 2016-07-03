@@ -86,7 +86,7 @@ class PermissionModel extends Model
         //开启事务
         $this->startTrans();
         //获取所有的后代权限,一次性删除
-        $permission_info = $this->field(['lft','rght'])->find($id);
+        $permission_info = $this->field(['lft,rght'])->find($id);
         //设置条件
         $cond=[
             'lft'=>['egt',$permission_info['lft']],
@@ -115,6 +115,17 @@ class PermissionModel extends Model
             $this->error='删除失败';
             return false;
         }
+        //实例化
+        $menu_permission_model = M("MenuPermission");
+        //删除权限时删除对应关联表中的数据
+        if($menu_permission_model->where(['permission_id'=>$id])->delete()===false){
+            //回滚
+            $this->rollback();
+            //错误信息
+            $this->error='删除菜单关联失败';
+            return false;
+        }
+
         //提交
         $this->commit();
         return true;

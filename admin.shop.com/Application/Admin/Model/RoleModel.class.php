@@ -199,8 +199,20 @@ class RoleModel extends Model
             $this->rollback();
             return false;
         }
+
+        $admin_role_model = M('AdminRole');
+        //删除关联的角色
+        if($admin_role_model->where(['role_id'=>$id])->delete()===false){
+            $this->error = '删除管理员关联失败';
+            $this->rollback();
+            return false;
+        }
         //提交
         $this->commit();
         return true;
+    }
+
+    public function getList(){
+        return $this->where(['status'=>1])->select();
     }
 }
