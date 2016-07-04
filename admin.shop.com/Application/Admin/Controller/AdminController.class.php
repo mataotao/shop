@@ -22,6 +22,9 @@ class AdminController extends Controller
         $this->_model = D('Admin');
     }
 
+    /**
+     * 显示列表页面
+     */
     public function index(){
         $name = I('get.name');
         $cond=[];
@@ -34,8 +37,12 @@ class AdminController extends Controller
         $this->display();
     }
 
+    /**
+     * 添加信息
+     */
     public function add(){
         if(IS_POST){
+            //设置create的场景方便自动完成和自动验证
             if($this->_model->create("",'register')===false){
                 $this->error(get_error($this->_model));
             }
@@ -45,11 +52,16 @@ class AdminController extends Controller
                 $this->success('添加成功',U('index'));
             }
         }else{
+            //调用获取所有角色的方法
             $this->_before_view();
             $this->display();
         }
     }
 
+    /**
+     * 修改数据
+     * @param $id int 要修改的id
+     */
     public function edit($id){
         if(IS_POST){
             if($this->_model->create()===false){
@@ -61,13 +73,19 @@ class AdminController extends Controller
                 $this->success('修改成功',U('index'));
             }
         }else{
+            //获取要修改的数据
             $row = $this->_model->getInfo($id);
             $this->assign('row',$row);
+            //调用获取所有角色的方法
             $this->_before_view();
             $this->display('add');
         }
     }
 
+    /**
+     * 删除数据
+     * @param $id int 删除的id
+     */
     public function remove($id){
         if($this->_model->deleteAdmin($id)===false){
             $this->error(get_error($this->_model));
@@ -76,24 +94,54 @@ class AdminController extends Controller
         }
     }
 
+    /**
+     * 重置密码
+     * @param $id int 重置密码的id
+     */
     public function reset($id){
         if(IS_POST){
+            //设置create的场景方便自动完成和自动验证
             if($this->_model->create("",'resetpassword')===false){
                 $this->error(get_error($this->_model));
             }
             if(($row=$this->_model->resetAdmin($id))===false){
                 $this->error(get_error($this->_model));
             }else{
-                $this->success('重置成功',U('index'));
+                $this->success("重置成功密码为{$row['password']}",U('index'),NOW_TIME);
             }
         }else{
             $this->assign('id',$id);
             $this->display();
         }
     }
+
+    /**
+     * 获取所有角色的数据
+     */
     private function _before_view(){
         $role_model = D('Role');
         $roles = $role_model->getList();
         $this->assign('roles',json_encode($roles));
+    }
+    
+    public function login(){
+        if(IS_POST){
+            if($this->_model->create()===false){
+                $this->error(get_error($this->_model));
+            }
+            if($this->_model->login()===false){
+                $this->error(get_error($this->_model));
+            }else{
+                $this->success('登录成功',U('Index/index'));
+            }
+        }else{
+            $this->display();
+        }
+    }
+
+    public function logout(){
+        session(null);
+        cookie(null);
+        $this->success('退出成功',U('login'));
     }
 }
