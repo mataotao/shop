@@ -107,7 +107,8 @@ class AdminController extends Controller
             if(($row=$this->_model->resetAdmin($id))===false){
                 $this->error(get_error($this->_model));
             }else{
-                $this->success("重置成功密码为{$row['password']}",U('index'),NOW_TIME);
+                echo "<script>alert('密码修改成功密码为{$row['password']}')</script>";
+                $this->success("",U('index/main'),0);
             }
         }else{
             $this->assign('id',$id);

@@ -151,6 +151,26 @@ class GoodsModel extends Model
             $this->rollback();
             return false;
         }
+        //会员价格
+        $member_goods_price_model = M('MemberGoodsPrice');
+        $member_level_prices = I('post.member_level_price');
+        $data = [];
+        foreach($member_level_prices as $member_level_price=>$level_price){
+            if(!$level_price){
+                continue;
+            }
+            $data[]=[
+                'goods_id'=>$id,
+                'member_level_id'=>$member_level_price,
+                'price'=>$level_price
+            ];
+        }
+
+        if($data && ($member_goods_price_model->addAll($data)===false)){
+            $this->error = '会员价格添加失败';
+            $this->rollback();
+            return false;
+        }
         //提交
         $this->commit();
         return true;
@@ -223,6 +243,9 @@ class GoodsModel extends Model
         //动态获取,通过goods_id获取路径
         $row['galleries']=$goods_gallery_model->getFieldByGoodsId($id,'id,path');
         //返回数据
+        //会员价格
+        $member_goods_price_model = M('MemberGoodsPrice');
+        $row['member_prices'] = $member_goods_price_model->where(['goods_id'=>$id])->getField("member_level_id,price");
         return $row;
     }
 
@@ -283,6 +306,28 @@ class GoodsModel extends Model
                 return false;
             }
         }
+
+        //会员价格
+        $member_goods_price_model = M('MemberGoodsPrice');
+        $member_goods_price_model->where(['goods_id'=>$id])->delete();
+        $member_level_prices = I('post.member_level_price');
+        $data = [];
+        foreach($member_level_prices as $member_level_price=>$level_price){
+            if(!$level_price){
+                continue;
+            }
+            $data[]=[
+                'goods_id'=>$id,
+                'member_level_id'=>$member_level_price,
+                'price'=>$level_price
+            ];
+        }
+
+        if($data && ($member_goods_price_model->addAll($data)===false)){
+            $this->error = '会员价格添加失败';
+            $this->rollback();
+            return false;
+        }
         //提交
         $this->commit();
         return true;
@@ -322,6 +367,9 @@ class GoodsModel extends Model
             $this->rollback();
             return false;
         }
+        //删除会员价格
+        $member_goods_price_model = M('MemberGoodsPrice');
+        $member_goods_price_model->where(['goods_id'=>$data['id']])->delete();
         //提交
         $this->commit();
         return true;

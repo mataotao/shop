@@ -51,7 +51,7 @@ return array(
             'Admin/Index/menu',
             'Admin/Index/main',
             'Admin/Admin/logout',
-            'Admin/Admin/changePassword',
+            'Admin/Admin/reset',
         ],
     ],
     

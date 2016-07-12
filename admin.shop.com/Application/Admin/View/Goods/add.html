@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="__ZTREE__/css/zTreeStyle/zTreeStyle.css" type="text/css"/>
 <css href='__UPLOADIFY__/common.css'/>
 <style type="text/css">
-	.gallery-upload-pre-item img{
+    #logo-preview,.gallery-upload-pre-item img{
 		width:150px;
 	}
 
@@ -56,6 +56,13 @@
                     <span class="require-field">*</span></td>
                 </tr>
                 <tr>
+                    <td class="label">LOGO：</td>
+                    <td>
+                        <input type="hidden" name="logo" id="logo" value="{$row.logo}" size="30" />
+                        <img src="{$row.logo}" id="logo-preview"/>
+                        <input type="file" id="goods_logo"/>
+                </tr>
+                <tr>
                     <td class="label">商品货号： </td>
                     <td>
                         <present name='row'>
@@ -91,6 +98,15 @@
                     <td>
                         <input type="text" name="shop_price" value="{$row.shop_price}" size="20"/>
                         <span class="require-field">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">会员价： </td>
+                    <td>
+                        <foreach name="member_levels" item="member_level">
+                            {$member_level.name}<input type="text" name="member_level_price[{$member_level.id}]" value="{$row['member_prices'][$member_level['id']]}" size="20"/> <br />
+                        </foreach>
+
                     </td>
                 </tr>
 				<tr>
@@ -164,7 +180,7 @@
                 </tr>
             </table>
 
-			
+
             <div class="button-div">
                 <input type="hidden" name="id" value="{$row.id}">
                 <input type="submit" value=" 确定 " class="button"/>
@@ -188,7 +204,7 @@
 <js href='__LAYER__/layer.js'/>
 <script>
         //ueditor开始
-    var ue = UE.getEditor('editor')
+    var ue = UE.getEditor('editor',{serverUrl: '{:U('Editor/ueditor')}'})
 
         //ueditor结束
 
@@ -317,6 +333,24 @@
         }
         })
     //删除图片结束
+    //logo
+        logo_options = {
+            swf:'__UPLOADIFY__/uploadify.swf',
+            uploader:'{:U("Upload/uploadImg")}',
+            buttonText:' 选择文件 ',
+            fileObjName:'file_data',
+            onUploadSuccess:function(file_item,response){
+                var data = $.parseJSON(response);
+                if(data.status){
+                    $('#logo').val(data.file_url);
+                    $('#logo-preview').attr('src',data.file_url);
+                    layer.alert(data.msg, {icon: 6});
+                }else{
+                    layer.alert(data.msg, {icon: 5});
+                }
+            },
+        };
+        $('#goods_logo').uploadify(logo_options);
 </script>
 </body>
 </html>

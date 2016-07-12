@@ -24,6 +24,8 @@ class IndexController extends Controller {
      */
     public function menu(){
         $menu_model = D('Menu');
+        $userinfo = login();
+        $this->assign('userinfo',$userinfo);
         //获取登录用户所拥有的菜单
         $menus = $menu_model->getMenuList();
         $this->assign('menus',$menus);

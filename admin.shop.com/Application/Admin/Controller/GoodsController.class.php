@@ -190,6 +190,8 @@ class GoodsController extends Controller
         $supplier = $supplier_model->getList();
         //赋值
         $this->assign('supplier',$supplier);
+        $member_level_model = D('member_level');
+        $this->assign('member_levels',$member_level_model->getList());
     }
 
     /**
